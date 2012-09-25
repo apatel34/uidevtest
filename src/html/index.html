@@ -1,0 +1,99 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+		<meta charset="utf-8" />
+        <link href="../css/uidevtest.css" rel="stylesheet" type="text/css">
+        <!--[if IE]>
+        <script src="http://html5shiv.googlecode.com/svn/trunk
+/html5.js"></script>
+        <![endif]-->
+        
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.0/jquery.min.js"></script>
+
+<script type="text/javascript">
+function load()
+{
+	if(location.href.match(/(\?|&)story($|&|=)/)){
+		if(window.innerWidth<=480){
+			genStory(location.href.match(/story=sto0([^&]+)/)[1]-1);
+		}
+		else{
+			genStory3Col(location.href.match(/story=sto0([^&]+)/)[1]-1);
+		}
+	}
+	else{
+		genList();
+	}
+}
+
+function genList()
+{
+$(document).ready(function()
+	{
+		$.getJSON("../js/uidevtest-data.js",function(data)
+		{
+				$.each(data.objects, function(i,data){
+					var div_data ="<div class='box'><a class=storyThumb > <img src="+data.lead_photo_image_url+" width='130' height='115'> </a>"+ //Story Thumbnail
+					"<div style='padding-top:5px;'><a class=storyHeader href=?story=sto0"+(i+1)+">"+data.title+"</a>"+ //Story Headline
+					"<div> Category/"+data.categories_name+"</div><br />"+//Category Name
+					"<div class=storyInfo> Posted: " +data.pub_date + "</br>Updated: "+data.pub_date + " </div></div></div>";//Pub Dates
+					
+					$(div_data).appendTo(".storylist");
+				});
+			}
+		);
+		return false;
+	});
+};
+
+function genStory(num) 
+{
+$(document).ready(function()
+	{
+		$.getJSON("../js/uidevtest-data.js",function(data)
+		{
+			var div_data ="<div class='box'><a class=breadcrumb href='../html/index.html'>HOME</a>"+//Breadcrumb
+			"<div class='pubInfo'> Updated: "+data.objects[num].pub_date+" | Posted: "+data.objects[num].updated+"</div>"+//Publication Information
+			"<div class='headline'>"+data.objects[num].title+"</div>"+//Headline
+			"<div style='padding-left:5px; margin-top:10px; margin-bottom:10px;'><img class='comment' /><a class=link>COMMENT </a> <img class='share' /><a class=link>SHARE </a><img class='favorite' /><a class=link>FAVORITE </a> <img class='vote' /><a class=link>VOTE </a></div>"+//Social
+			"<div style='margin-top:10px; float:left;'><img src="+data.objects[num].lead_photo_image_url+" height='230'><div style='text-align:right; color: #898989;'>"+data.objects[num].lead_photo_credit+"</div><div class=caption>"+data.objects[num].lead_photo_caption+"</div></div>"+//Photo
+			"<div class=storyText style='float:left;'></br>By "+data.objects[num].author+"</br>"+data.objects[num].story+"</div></div></div>"//Story
+			
+			$(div_data).appendTo(".onecol");
+		});
+		return false;
+	});
+};
+
+function genStory3Col(num) 
+{
+$(document).ready(function()
+	{
+		$.getJSON("../js/uidevtest-data.js",function(data)
+		{
+			var div_data ="<div class='box'><div class=breadcrumb> <a href='../html/index.html' style='text-decoration:none;'>HOME </a> > NEWS</div>"+//Breadcrumb
+			"<div class='headline'>"+data.objects[num].title+"</div>"+//Headline
+			"<div class='pubInfo'> Updated: "+data.objects[num].pub_date+" | Posted: "+data.objects[num].updated+"</div>"+//Publication Information
+			"<div class='left'><div style='margin-top:10px; margin-right:10px; float:left;'><img style='border:2px black;' src="+data.objects[num].lead_photo_image_url+"/><div style='font-family: Arial,Helvetica, sans-serif;  text-align:right; margin-top: -23px; margin-bottom:10px; color: #000; background-color:#fff; opacity:0.6; '>"+data.objects[num].lead_photo_credit+"</div><div class=caption style: 'color:'>"+data.objects[num].lead_photo_caption+"</div></div></div>"+//Photo
+			"<div style='position:absolute; margin-top:10px; margin-bottom:10px; margin-left:270px;'><img class='comment3' /><a class=socialLink>COMMENT </a> <img class='share3' /><a class=socialLink>SHARE </a><img class='favorite3' /><a class=socialLink>FAVORITE </a> <img class='vote3' /><a class=socialLink>VOTE </a></div>"+//Social
+			"<div class='center'><div class=storyText>By "+data.objects[num].author+"</br>"+data.objects[num].story+"</div></div><div class=right></div></div>"//Story
+			$(div_data).appendTo(".threecol");
+		});
+	$(".storylist").hide(); 
+		return false;
+	});
+};
+</script>
+</head>
+
+<body onload="load()">
+    
+ <div class="storylist"></div>
+ 
+ <div class="onecol"></div>
+ 
+ <div class="threecol"></div>
+ 
+</body>
+
+</html>
